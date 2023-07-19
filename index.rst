@@ -33,10 +33,6 @@ site
 
 .. include:: ./trim.rst
 
-.. note::
-   you’ve never imported site, but have always benefited from it
-   If that’s surprising to you: you chose the right talk
-
 site
 ====
 
@@ -48,6 +44,8 @@ site
 .. include:: ./trim.rst
 
 .. note::
+   you’ve never imported site, but have always benefited from it
+   If that’s surprising to you: you chose the right talk
    done out-of-site (magically)
 
 site
@@ -389,6 +387,7 @@ Enable Interactive Features
 
 .. note::
    just always use sys.exit()
+   nice to not need an import to leave REPL
 
 ===========================
 Execute User Customizations
@@ -405,7 +404,7 @@ Execute User Customizations
 
 .. note::
    allows administrator to alter default Python behavior for any users on the machine
-   set default encoding; telemetry
+   telemetry
 
 Execute User Customizations
 ===========================
@@ -413,6 +412,15 @@ Execute User Customizations
 .. code-block:: python
 
   # sitecustomize.py
+  import logging.handlers
+  handler = logging.handlers.SMTPHandler(
+      'mailserver.example.com',
+      '"APPLICATION ALERT" <host123@example.com>'
+      'python-errors@example.com'
+      'Errors from host123'
+   )
+   handler.setLevel(logging.ERROR)
+   logging.getLogger('').addHandler(handler)
 
 .. include:: ./trim.rst
 
@@ -426,7 +434,6 @@ Execute User Customizations
 
 .. note::
    customize Python when you run it. tune it with sys vars
-   import a traceback prettifier (pretty-traceback, rich tracebacks)
 
 Execute User Customizations
 ===========================
@@ -434,6 +441,8 @@ Execute User Customizations
 .. code-block:: python
 
    # usercustomize.py
+   import pretty_traceback
+   pretty_traceback.install()
 
 .. include:: ./trim.rst
 
@@ -447,9 +456,9 @@ Execute User Customizations
 .. include:: ./trim.rst
 
 .. note::
+   exece'd not imported. shared global scope
    WHY: interactive-only customizations, similar to `site` enabling interactive features
-   -  example: automatic __future__ imports for repl
-   -  import numpy as np
+   always be careful to not crash the interpreter loop. Not version specific
 
 Execute User Customizations
 ===========================
@@ -457,8 +466,10 @@ Execute User Customizations
 .. code-block:: python
 
    # startup.py
-
-:ref:`https://gist.github.com/ucodery/23f5de4f40b3e88fd9f927dc8f0d4a42`
+   from __future__ import annotations
+   import sys
+   import numpy as np
+   sys.set_int_max_str_digits(0)
 
 .. include:: ./trim.rst
 
@@ -493,6 +504,7 @@ Too Many Paths
 .. include:: ./trim.rst
 
 .. note::
+   stop pesky shaddowing bugs
    Must use 3.11+
 
 Too Much Customization
@@ -539,6 +551,19 @@ Safe Python
    -  no custom python code executed prior to __main__
    Ultimately, less “magic”
 
+===============
+ Go, Customize!
+===============
+
+:ref:`https://gist.github.com/ucodery/23f5de4f40b3e88fd9f927dc8f0d4a42`
+
+.. include:: ./foot.rst
+
+.. note::
+   Be Safe when you need to be.
+   Python is a tool, make it work for you
+   personal and productive for you
+
 ===========
  Questions?
 ===========
@@ -548,6 +573,4 @@ Safe Python
 .. include:: ./foot.rst
 
 .. note::
-   Be Safe when you need to be. But also customize python and make it the tools that is most productive for you
-   make python personal to your needs and preferences
    Thanks to volunteers
