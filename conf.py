@@ -17,15 +17,15 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Packaging Python in 2022'
-copyright = '2022, Jeremiah Paige'
+project = 'Site Unseen'
+copyright = '2023, Jeremiah Paige'
 author = 'Jeremiah Paige'
 
 # The short X.Y version
-version = '2022.06.08'
+version = '2023.07.21'
 
 # The full version, including alpha/beta/rc tags
-release = '2022.06.08'
+release = '2023.07.21'
 
 
 # -- General configuration ---------------------------------------------------

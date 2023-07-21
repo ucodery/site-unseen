@@ -81,9 +81,6 @@ dd {
   font-weight: 300;
   font-size: 42px;
   text-decoration: underline;
-  position: absolute;
-  bottom: 125px;
-  left: 80;
 }
 /* code boxes */
 div.highlight {

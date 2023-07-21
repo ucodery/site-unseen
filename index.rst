@@ -39,7 +39,7 @@ site
 - :code:`import site`
 - Done for you before ``__main__`` starts
    - Can be turned off with ``-S`` option
-   - Explicit import will always enable it
+   - Explicit import will still turn it on
 
 .. include:: ./trim.rst
 
@@ -172,20 +172,19 @@ Extend Module Search Path
 
 .. code-block::
 
-   error: could not create '/Users/ucodery/unseen/.venv/lib/python3.11/site-pack
-   ages/example': Permission denied
+   error: could not create '/Users/ucodery/unseen/.venv/lib/python3.11/site-packages
+   /example': Permission denied
    ----------------------------------------
-   ERROR: Command errored out with exit status 1: /Users/ucodery/unseen/.venv/bi
-   n/python -u -c 'import sys, setuptools, tokenize; sys.argv[0] = '"'"'/private
-   /var/folders/kz/fz2z89ws6rx5_0vn64nrwpb40000gn/T/pip-install-kuiz530q/example
-   /setup.py'"'"'; __file__='"'"'/private/var/folders/kz/fz2z89ws6rx5_0vn64nrwpb
-   40000gn/T/pip-install-kuiz530q/example/setup.py'"'"';f=getattr(tokenize, '"'"
-   'open'"'"', open)(__file__);code=f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"
-   ');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' install --record 
-   /private/var/folders/kz/fz2z89ws6rx5_0vn64nrwpb40000gn/T/pip-record-3h15zlul/
-   install-record.txt --single-version-externally-managed --compile --install-he
-   aders /Users/ucodery/unseen/.venv/include/site/python3.11/example Check the l
-   ogs for full command output.
+   ERROR: Command errored out with exit status 1: /Users/ucodery/unseen/.venv/bin/py
+   thon -u -c 'import sys, setuptools, tokenize; sys.argv[0] = '"'"'/private/var/fol
+   ders/kz/fz2z89ws6rx5_0vn64nrwpb40000gn/T/pip-install-kuiz530q/example/setup.py'"'
+   "'; __file__='"'"'/private/var/folders/kz/fz2z89ws6rx5_0vn64nrwpb40000gn/T/pip-in
+   stall-kuiz530q/example/setup.py'"'"';f=getattr(tokenize, '"'"'open'"'"', open)(__
+   file__);code=f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compil
+   e(code, __file__, '"'"'exec'"'"'))' install --record /private/var/folders/kz/fz2z
+   89ws6rx5_0vn64nrwpb40000gn/T/pip-record-3h15zlul/install-record.txt --single-vers
+   ion-externally-managed --compile --install-headers /Users/ucodery/unseen/.venv/in
+   clude/site/python3.11/example Check the logs for full command output.
 
 .. include:: ./trim.rst
 
@@ -206,8 +205,10 @@ Extend Module Search Path
 
    $ pip install example --user
    Collecting example
-     Using cached https://files.pythonhosted.org/packages/c9/c9/6122a974f5b611b16396c918722ea75945db7dcd3069c477a7c608a405a0/example-0.1.0.tar.gz
-   Requirement already satisfied: six in /Users/ucodery/.local/lib/python3.11/site-packages (from example) (1.16.0)
+     Using cached https://files.pythonhosted.org/packages/c9/c9/6122a974f5b611b16396
+   c918722ea75945db7dcd3069c477a7c608a405a0/example-0.1.0.tar.gz
+   Requirement already satisfied: six in /Users/ucodery/.local/lib/python3.11/site-p
+   ackages (from example) (1.16.0)
    Installing collected packages: example
        Running setup.py install for example ... done
    Successfully installed example-0.1.0
@@ -261,6 +262,7 @@ Extend Module Search Path
 
 .. note::
    Every site-packages dir that is added to sys.path is searched for for .pth
+   Allow installed packages to participate in the site customization
    These dirs also add to sys.path, if exist
    They also allow other imports to happen before the main import, just like `site`
    like metaclasses: they are an advanced answer
@@ -289,7 +291,7 @@ Extend Module Search Path
        '/Users/ucodery/.local/py311/lib/python311.zip',             # stdlib
        '/Users/ucodery/.local/py311/lib/python3.11',                # stdlib
        '/Users/ucodery/.local/py311/lib/python3.11/lib-dynload',    # stdlib
-       '/Users/ucodery/unseen/.venv/lib/python3.11/site-packages',  # venv
+       '/Users/ucodery/unseen/.venv/lib/python3.11/site-packages',  # venv site
        '/tmp/EuroPython/python/packages',                           # pth
        '/Users/ucodery/.local/lib/python3.11/site-packages',        # user site
        '/Users/ucodery/.local/py311/lib/python3.11/site-packages',  # system site
@@ -299,31 +301,6 @@ Extend Module Search Path
    ENABLE_USER_SITE: True
 
 .. include:: ./trim.rst
-
-Extend Module Search Path
-=========================
-
-.. code-block::
-
-   $ python -v -m site 2>&1 | grep 'Processing|Adding'
-   Processing global site-packages
-   Adding directory: '/Users/ucodery/unseen/.venv/lib/python3.11/site-packages'
-   Processing .pth file: '/Users/ucodery/unseen/.venv/lib/python3.11/site-packages/unseen.pth'
-   Processing user site-packages
-   Adding directory: '/Users/ucodery/.local/lib/python3.11/site-packages'
-   Processing global site-packages
-   Adding directory: '/Users/ucodery/unseen/.venv/lib/python3.11/site-packages'
-   Processing .pth file: '/Users/ucodery/unseen/.venv/lib/python3.11/site-packages/unseen.pth'
-   Adding directory: '/Users/ucodery/.local/py311/lib/python3.11/site-packages'
-   Processing global site-packages
-   Adding directory: '/Users/ucodery/unseen/.venv/lib/python3.11/site-packages'
-   Processing .pth file: '/Users/ucodery/unseen/.venv/lib/python3.11/site-packages/unseen.pth'
-
-.. include:: ./trim.rst
-
-.. note::
-   Without filtering, around 300 lines of log
-   Python 3.10+
 
 ============================
  Enable Interactive Features
@@ -395,6 +372,9 @@ Execute User Customizations
 
 .. include:: ./trim.rst
 
+.. note::
+   more hooks for other code to participate in interpreter startup customization
+
 Execute User Customizations
 ===========================
 
@@ -411,11 +391,11 @@ Execute User Customizations
 
 .. code-block:: python
 
-  # sitecustomize.py
-  import logging.handlers
-  handler = logging.handlers.SMTPHandler(
+   # sitecustomize.py
+   import logging.handlers
+   handler = logging.handlers.SMTPHandler(
       'mailserver.example.com',
-      '"APPLICATION ALERT" <host123@example.com>'
+      '"Python Error Monitor" <host123@example.com>'
       'python-errors@example.com'
       'Errors from host123'
    )
@@ -434,6 +414,8 @@ Execute User Customizations
 
 .. note::
    customize Python when you run it. tune it with sys vars
+   you change or add to python
+   remember: slows all python startup
 
 Execute User Customizations
 ===========================
@@ -467,8 +449,8 @@ Execute User Customizations
 
    # startup.py
    from __future__ import annotations
-   import sys
    import numpy as np
+   import sys
    sys.set_int_max_str_digits(0)
 
 .. include:: ./trim.rst
@@ -484,22 +466,48 @@ Execute User Customizations
    Also for when your world is burning down
    either way less "magic"
 
-When Things Go Wrong
-====================
+Too Many Paths
+==============
 
-- :code:`python -v` [``PYTHONVERBOSE=1``]
+- :code:`python -v`
 - :code:`python -X importtime`
 
 .. include:: ./trim.rst
 
 .. note::
    cpython specific option
+   these and many of the other options have env vars
 
 Too Many Paths
 ==============
 
-- [``PYTHONPATH=``]
-- :code:`python -P` [``PYTHONSAFEPATH=x``]
+.. code-block::
+
+   $ python -v -m site 2>&1 | grep 'Processing|Adding'
+   Processing global site-packages
+   Adding directory: '/Users/ucodery/unseen/.venv/lib/python3.11/site-packages'
+   Processing .pth file: '/Users/ucodery/unseen/.venv/lib/python3.11/site-packages/unseen.pth'
+   Processing user site-packages
+   Adding directory: '/Users/ucodery/.local/lib/python3.11/site-packages'
+   Processing global site-packages
+   Adding directory: '/Users/ucodery/unseen/.venv/lib/python3.11/site-packages'
+   Processing .pth file: '/Users/ucodery/unseen/.venv/lib/python3.11/site-packages/unseen.pth'
+   Adding directory: '/Users/ucodery/.local/py311/lib/python3.11/site-packages'
+   Processing global site-packages
+   Adding directory: '/Users/ucodery/unseen/.venv/lib/python3.11/site-packages'
+   Processing .pth file: '/Users/ucodery/unseen/.venv/lib/python3.11/site-packages/unseen.pth'
+
+.. include:: ./trim.rst
+
+.. note::
+   Without filtering, around 300 lines of log
+   Python 3.10+
+
+Too Many Paths
+==============
+
+- :code:`PYTHONPATH="" python`
+- :code:`python -P`
 
 .. include:: ./trim.rst
 
@@ -510,8 +518,8 @@ Too Many Paths
 Too Much Customization
 ======================
 
-- [``PYTHONSTARTUP=``]
-- :code:`python -s` [``PYTHONUSERSITE=``]
+- :code:`PYTHONSTARTUP="" python`
+- :code:`python -s`
 - :code:`python -S`
 
 .. include:: ./trim.rst
@@ -524,9 +532,9 @@ Untrusted User
 ==============
 
 - :code:`python -E`
-   - ``PYTHONPATH=`` ``PYTHONSTARTUP=``
+   - ``PYTHONPATH``, ``PYTHONSTARTUP``
 - :code:`python -I`
-   - shortcut for ``-Es``
+   - shortcut for ``-E``, ``-s``
 
 .. include:: ./trim.rst
 
@@ -557,20 +565,12 @@ Safe Python
 
 :ref:`https://gist.github.com/ucodery/23f5de4f40b3e88fd9f927dc8f0d4a42`
 
+:ref:`https://github.com/ucodery/site-unseen`
+
 .. include:: ./foot.rst
 
 .. note::
    Be Safe when you need to be.
    Python is a tool, make it work for you
    personal and productive for you
-
-===========
- Questions?
-===========
-
-:ref:`https://github.com/ucodery/site-unseen`
-
-.. include:: ./foot.rst
-
-.. note::
-   Thanks to volunteers
+   a joy to use every day
